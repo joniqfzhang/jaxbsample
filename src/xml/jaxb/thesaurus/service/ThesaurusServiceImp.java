@@ -63,6 +63,7 @@ public class ThesaurusServiceImp implements ThesaurusService {
 	@Override
 	public void createThesaurustermInserts(List<ThesaurusRecord> thesaurustermRecordList, String fileToWrite) {
 		Path sqlInsertFile = Paths.get(fileToWrite);
+		//https://stackoverflow.com/questions/19794101/how-to-overwrite-file-via-java-nio-writer for file output content control
 		try (BufferedWriter writer = 
                 Files.newBufferedWriter(sqlInsertFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
 			thesaurustermRecordList.forEach(r -> {
