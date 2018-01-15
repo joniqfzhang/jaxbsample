@@ -24,12 +24,16 @@ public class Thesaurus {
 		this.name = name;
 		this.thesaurusList = thesaurusList;
 	}
+	@XmlElement(name = "ACTIVEFROM")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	public Date getStartFrom() {
 		return startFrom;
 	}
 	public void setStartFrom(Date startFrom) {
 		this.startFrom = startFrom;
 	}
+	@XmlElement(name = "ACTIVETO")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	public Date getEndTo() {
 		return endTo;
 	}
