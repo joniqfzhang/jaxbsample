@@ -59,5 +59,71 @@ public class ThesaurusServiceImp implements ThesaurusService {
 		// all records
 		return thesaurusRecords;
 	}
+	
+	@Override
+	public void createThesaurustermInserts(List<ThesaurusRecord> thesaurustermRecordList, String fileToWrite) {
+		Path sqlInsertFile = Paths.get(fileToWrite);
+		try (BufferedWriter writer = 
+                Files.newBufferedWriter(sqlInsertFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
+			thesaurustermRecordList.forEach(r -> {
+				try {
+					writer.write(insertThesaurustermSql(r));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+          
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
+	}
+	
+	private List<ThesaurusRecord> sortThesaurustermRecords(List<ThesaurusRecord> thesaurustermRecords) {
+		Comparator<ThesaurustermRecord> sortByLevel0 = (t1, t2) -> t1.getLevel0().compareToIgnoreCase(t2.getLevel0());
+		Comparator<ThesaurustermRecord> sortByLevel1 = (t1, t2) -> t1.getLevel1().compareToIgnoreCase(t2.getLevel1());
+		Comparator<ThesaurustermRecord> sortByLevel2 = (t1, t2) -> t1.getLevel2().compareToIgnoreCase(t2.getLevel2());
+		Comparator<ThesaurustermRecord> sortByLevel3 = (t1, t2) -> t1.getLevel3().compareToIgnoreCase(t2.getLevel3());
+
+		List<ThesaurustermRecord> sortedThesaurustermRecords = thesaurustermRecords
+				.stream()
+				.sorted(sortByLevel0
+						.thenComparing(sortByLevel1)
+						.thenComparing(sortByLevel2)
+						.thenComparing(sortByLevel3))
+				.collect(Collectors.toList());
+		return sortedThesaurustermRecords;
+	}
+	
+	private String insertThesaurustermSql(ThesaurusRecord record) {
+		
+		String pattern = "yyyy-MM-dd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		
+		String toDate = record.getActiveto() != null ? "'" +simpleDateFormat.format(record.getActiveto()) + "'" : null;		
+		String fromDate = record.getActivefrom() != null ? "'" + simpleDateFormat.format(record.getActivefrom()) + "'" : "null";
+		
+		String newLine = System.getProperty("line.separator");
+		String sql = "INSERT INTO THESAURUS_TERMS "
+				//+ "(THESAURUS_TERM_ID, "
+				+ "(THESAURUS_TERM_ACTIVEFROM, "
+				+ "THESAURUS_TERM_ACTIVETO, "
+				+ "THESAURUS_TERM_LEVEL0, "
+				+ "THESAURUS_TERM_LEVEL1, "
+				+ "THESAURUS_TERM_LEVEL2, "
+				+ "THESAURUS_TERM_LEVEL3) "
+				+ "VALUES ("
+				//+ record.getId() + ", "
+				+ (fromDate) + ", "
+				+ (toDate) + ", "
+				+ (record.getLevel0() != null ? "'" + record.getLevel0().replace("'", "''")  + "'" : null) + ", "
+				+ (record.getLevel1() != null ? "'" + record.getLevel1().replace("'", "''") + "'" : null) + ", "
+				+ (record.getLevel2() != null ? "'" + record.getLevel2().replace("'", "''") + "'" : null) + ", "
+				+ (record.getLevel3() != null ? "'" + record.getLevel3().replace("'", "''") + "'" : null) + ");"
+				+ newLine;
+		System.out.print(sql);
+		return sql;
+	}
 
 }
