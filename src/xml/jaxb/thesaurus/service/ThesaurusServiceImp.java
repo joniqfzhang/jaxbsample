@@ -106,7 +106,7 @@ public class ThesaurusServiceImp implements ThesaurusService {
 		String fromDate = record.getActivefrom() != null ? "'" + simpleDateFormat.format(record.getActivefrom()) + "'" : "null";
 		
 		String newLine = System.getProperty("line.separator");
-		String sql = "INSERT INTO THESAURUS_TERMS "
+		String sql = "INSERT INTO MAILROOM.THESAURUS_TERMS "
 				//+ "(THESAURUS_TERM_ID, "
 				+ "(THESAURUS_TERM_ACTIVEFROM, "
 				+ "THESAURUS_TERM_ACTIVETO, "
