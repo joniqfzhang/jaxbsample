@@ -7,4 +7,5 @@ import xml.jaxb.thesaurus.model.ThesaurusRecord;
 
 public interface ThesaurusService {
 	public List<ThesaurusRecord> createThesaurusRecords(Thesaurus root);
+	public void createThesaurusInserts(List<ThesaurusRecord> thesaurusRecordList, String fileName);
 }
