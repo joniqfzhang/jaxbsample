@@ -64,7 +64,7 @@ public class ThesaurusServiceImp implements ThesaurusService {
 	public void createThesaurustermInserts(List<ThesaurusRecord> thesaurustermRecordList, String fileToWrite) {
 		Path sqlInsertFile = Paths.get(fileToWrite);
 		try (BufferedWriter writer = 
-                Files.newBufferedWriter(sqlInsertFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
+                Files.newBufferedWriter(sqlInsertFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
 			thesaurustermRecordList.forEach(r -> {
 				try {
 					writer.write(insertThesaurustermSql(r));
